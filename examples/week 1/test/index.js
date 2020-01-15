@@ -1,0 +1,1 @@
+import './foo.spec.js';
