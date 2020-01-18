@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node -r esm src/index.js",
+    "test": "mocha -r esm test/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,7 +13,7 @@
     "chai": "^4.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "knex": "^0.20.5",
+    "knex": "^0.20.8",
     "mocha": "^6.2.2"
   }
 }
