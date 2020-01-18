@@ -27,7 +27,7 @@ To "play" with your new database you may wish to try running some queries, using
     * `SELECT * FROM jokes j JOIN jokes_categories jc ON j.id = jc.joke_id JOIN categories c ON jc.category_id = c.id WHERE c.title = 'Chicken';`
 
 * See me, as a precursor to repalcing me: remember to always SELECT before UPDATE-ing
-  * `SELECT * FROM users WHERE display_name='Jeremy Walker';
+  * `SELECT * FROM users WHERE display_name='Jeremy Walker';`
 * Replace my entry with your name/username
   * `UPDATE users set display_name='Your Name', username='Your_Username' WHERE display_name='Jeremy Walker';`
 
