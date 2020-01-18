@@ -1,10 +1,11 @@
 import express from 'express';
-import { getJoke, getJokes, getRandomJoke } from './jokes';
+import { getJokeById, getJokes, getRandomJoke } from './jokes';
+
 const app = express();
 
 const jokeRoute = (request, response) => {
   const { id } = request.params || {};
-  const joke = getJokeById(id);
+  const joke = getJokeById(parseFloat(id));
   response.json(joke);
 };
 app.get('/api/joke/:id', jokeRoute);
@@ -23,7 +24,6 @@ app.get('/api/search', searchRoute);
 
 const staticRoute = express.static('public');
 app.use('/static', staticRoute);
-app.use(staticRoute);
+app.use('/', staticRoute);
 
-app.listen(8000, () => 
-  console.log(`Listening on port 8000!`));
+export default app;

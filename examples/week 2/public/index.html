@@ -29,15 +29,43 @@ li {
 }
 </style>
 
+<script>
+const tellJoke = ({ question, answer }) =>
+  alert(`Question: ${question + '\n'} Answer: ${answer}`);
+  
+const alertRandom = async () => {
+  const response = await fetch('/api/random');
+  const joke = await response.json();
+  tellJoke(joke);
+};
+
+const alertSpecific = async jokeId => {
+  const response = await fetch('/api/joke/' + jokeId);
+  const joke = await response.json();
+  tellJoke(joke);
+};
+
+const alertCategory = async category => {
+  const response = await fetch('/api/search?category=' + category);
+  const jokes = await response.json();
+  if (jokes.length > 1) {
+    alert(`There were ${jokes.length} jokes in that category...`);
+ } else if (jokes.length) {
+   alert(`We have one joke in that category.  It is ...`);
+ }
+ jokes.forEach(tellJoke);
+};
+</script>
+
 <img src="/static/lol.png" style="width: 200px;" />
 <h1>Joke Teller</h1>
 <div>Would you like to hear ...?</div>
 <ul>
-  <li>Random Joke</li>
-  <li>Our Best <nobr>Knock-Knock</nobr> Joke</li>
+  <li onClick="alertRandom()">Random Joke</li>
+  <li onClick="alertSpecific(5)">Our Best <nobr>Knock-Knock</nobr> Joke</li>
 </ul>
 <div>Or would you prefer to see a list of all ...?</div>
 <ul>
-  <li>Chicken Crossing the Road Jokes</li>
-  <li>Knock-Knock Jokes</li>
+  <li onClick="alertCategory('Chicken')">Chicken Crossing the Road Jokes</li>
+  <li onClick="alertCategory('Knock Knock')">Knock-Knock Jokes</li>
 </ul>
