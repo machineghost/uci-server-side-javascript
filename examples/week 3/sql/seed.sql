@@ -23,10 +23,3 @@ INSERT INTO jokes_categories
 (joke_id, category_id) VALUES
 (1, 1), (2, 1), (2, 3), (3, 5),
 (4, 5), (5, 2);
-
-INSERT INTO joke_of_the_day
-(joke_id, display_date) VALUES
-(1, '1/1/2020'), (2, '1/2/2020'),
-(3, '1/3/2020'), (4, '1/4/2020'),
-(5, '1/5/2020');
-

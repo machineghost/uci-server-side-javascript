@@ -14,7 +14,7 @@ CREATE TABLE jokes (
   question text NOT NULL,
   answer text,
   created_by integer NOT NULL,
-  created_on timestamp NOT NULL 
+  created_on timestamp NOT NULL
              DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -26,9 +26,4 @@ CREATE TABLE categories (
 CREATE TABLE jokes_categories (
   joke_id integer NOT NULL,
   category_id integer NOT NULL
-);
-
-CREATE TABLE joke_of_the_day (
-  joke_id integer NOT NULL,
-  display_date date NOT NULL UNIQUE
 );
