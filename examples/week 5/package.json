@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean-db-test": "npm run reset-test-db; npm run test",
+    "db-test": "npm run reset-test-db; npm run test",
     "make-db": "dropdb jokes; createdb jokes",
     "make-test-db": "dropdb jokes-test; createdb jokes-test",
     "migrate": "knex migrate:latest",
@@ -23,8 +24,8 @@
     "express": "^4.17.1",
     "knex": "^0.20.8",
     "mocha": "^6.2.2",
-    "pg": "^7.17.1"
-  }
+    "pg": "^7.18.1"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/machineghost/uci-server-side-javascript/tree/master/examples"
