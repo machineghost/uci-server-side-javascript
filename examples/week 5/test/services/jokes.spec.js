@@ -72,13 +72,13 @@ describe('jokes services', () => {
           .where({ joke_id })).to.be.empty
       });
       it('has no effect on an invalid ID', async () => {
-        const numJokes = (await knex('jokes').count()).count;
+        const numJokes = (await knex('jokes').count())[0].count;
         const numJoins =
-          (await knex('jokes_categories').count()).count;
+          (await knex('jokes_categories').count())[0].count;
         await deleteJoke(-1);
-        expect((await knex('jokes').count()).count)
+        expect((await knex('jokes').count())[0].count)
           .to.equal(numJokes);
-        expect((await knex('jokes_categories').count()).count)
+        expect((await knex('jokes_categories').count())[0].count)
           .to.equal(numJoins);
       });
     });
