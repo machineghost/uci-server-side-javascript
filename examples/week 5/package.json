@@ -10,9 +10,8 @@
     "make-test-db": "dropdb jokes-test; createdb jokes-test",
     "migrate": "knex migrate:latest",
     "reset-db": "npm run make-db; npm run migrate; npm run seed",
-    "reset-test-db": "npm run make-test-db; npm run migrate -- --env=test; npm run seed-test",
-    "seed": "psql -d jokes -f sql/seed.sql",
-    "seed-test": "psql -d jokes-test -f sql/seed.sql",
+    "reset-test-db": "npm run make-test-db; npm run migrate -- --env=test; npm run seed -- --env=test",
+    "seed": "knex seed:run",
     "start": "node -r esm src/index.js",
     "test": "NODE_ENV=test mocha --exit -r esm test/index.js"
   },
