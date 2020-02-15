@@ -73,10 +73,9 @@ describe('jokes services', () => {
       });
       it('has no effect on an invalid ID', async () => {
         await deleteJoke(-1);
-        expect((await knex('jokes').count())[0].count)
-          .to.equal('6'); // same # of jokes
-        expect((await knex('jokes_categories').count())[0].count)
-          .to.equal('7'); // same # of JOINS
+        expect(await knex('jokes')).to.have.length(6);
+        expect(await knex('jokes_categories'))
+          .to.have.length(7);
       });
     });
 
@@ -110,8 +109,7 @@ describe('jokes services', () => {
       expect(wasErrorThrown).to.be.true;
     });
     afterEach(async () => {
-      await knex('jokes').where({ title: 'bar' })
-        .del();
+      await knex('jokes').where({ title: 'bar' }).del();
     })
   });
 });

@@ -1,5 +1,5 @@
 exports.seed = async knex => {
-  await knex('jokes').truncate();
+  await knex('jokes').del();
   await knex('jokes_categories').truncate();
   await knex('jokes').insert([
     {

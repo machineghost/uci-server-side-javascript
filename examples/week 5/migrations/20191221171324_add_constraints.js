@@ -26,9 +26,13 @@ exports.up = async knex => {
   await knex.schema.dropTableIfExists('jokes_categories');
   await knex.schema.createTable('jokes_categories', table => {
     table.integer('joke_id');
-    table.foreign('jokes').references('id');
-    table.integer('category_id')
-    table.foreign('categories').references('id');
+    table.integer('category_id');
+    table.foreign('joke_id')
+         .references('jokes.id')
+         .onDelete('cascade');
+    table.foreign('category_id')
+         .references('categories.id')
+         .onDelete('cascade');
     table.primary(['joke_id', 'category_id']);
   });
 };
