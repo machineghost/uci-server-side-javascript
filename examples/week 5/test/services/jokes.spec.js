@@ -18,6 +18,7 @@ describe('jokes services', () => {
         jokeIds.push(joke.id);
       };
       const firstId = jokeIds[0];
+      /// expect at least one of jokes #2-#4 to not be joke #1
       expect(
         firstId !== jokeIds[1] || firstId !== jokeIds[2] ||
         firstId !== jokeIds[3] || firstId !== jokeIds[4]
@@ -59,29 +60,26 @@ describe('jokes services', () => {
         .insert({ category_id: 1, joke_id });
     });
     afterEach(async () => {
-      await knex('jokes').delete().where({ id: joke_id });
-      await knex('jokes_categories')
-        .del().where({ joke_id });
+      await knex('jokes').del().where({ id: joke_id });
+      await knex('jokes_categories').del().where({ joke_id });
     });
     describe('deleteJoke', () => {
       it('deletes the joke & related record', async () => {
         await deleteJoke(joke_id);
         expect(await knex('jokes')
-          .where({ id: joke_id })).to.be.empty
+          .where({ id: joke_id })).to.be.empty // no joke
         expect(await knex('jokes_categories')
-          .where({ joke_id })).to.be.empty
+          .where({ joke_id })).to.be.empty // no JOINs
       });
       it('has no effect on an invalid ID', async () => {
-        const numJokes = (await knex('jokes').count())[0].count;
-        const numJoins =
-          (await knex('jokes_categories').count())[0].count;
         await deleteJoke(-1);
         expect((await knex('jokes').count())[0].count)
-          .to.equal(numJokes);
+          .to.equal('6'); // same # of jokes
         expect((await knex('jokes_categories').count())[0].count)
-          .to.equal(numJoins);
+          .to.equal('7'); // same # of JOINS
       });
     });
+
     describe('updateJoke', async () => {
       it('updates the joke\'s title to "baz"', async () => {
         await updateJoke(joke_id, { title: 'baz' });

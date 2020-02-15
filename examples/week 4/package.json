@@ -9,7 +9,7 @@
     "reset-db": "npm run recreate-db; npm run apply-db-schema; npm run seed-db",
     "seed-db": "psql -d jokes -f sql/seed.sql",
     "start": "node -r esm src/index.js",
-    "test": "mocha -r esm test/index.js"
+    "test": "mocha --exit -r esm test/index.js"
   },
   "author": "",
   "license": "ISC",

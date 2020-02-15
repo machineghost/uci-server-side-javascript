@@ -1,7 +1,7 @@
 import knex from '../database'
 
 const selectColumns = ['j.id', 'j.title', 'j.question', 'j.answer',
-  'j.created_on', 'u.display_name AS submitter', 'c.title AS category'];
+  'j.created_on', 'u.display_name AS submitter'];
 
 const buildBaseJokesQuery = (whereClause = {}) =>
   knex('jokes AS j')
@@ -12,8 +12,7 @@ const buildBaseJokesQuery = (whereClause = {}) =>
     .where(whereClause);
 
 const combineJokeRows = jokeRows => jokeRows.reduce((jokes, joke) => {
-  const existing = jokes.find(
-    ({ 'j.id': id }) => id === joke.id);
+  const existing = jokes.find(({ 'j.id': id }) => id === joke.id);
   if (existing) { // If it exists, add its category
     existing.categories.push(joke.category);
     return jokes;
@@ -23,12 +22,15 @@ const combineJokeRows = jokeRows => jokeRows.reduce((jokes, joke) => {
 }, []);
 
 
-const getJokesCount = async () => (await knex('jokes').count())[0].count;
+const getJokesCount = async () => parseFloat((await knex('jokes').count())[0].count);
 
 export const getRandomJoke = async () => {
   const count = await getJokesCount();
-  const query = buildBaseJokesQuery();
-  const rows = await query.offset(knex.raw(`floor(random() * ${count})`)).limit(1);
+  const query = buildBaseJokesQuery()
+    .offset(knex.raw(`floor(random() * ${count})`))
+    .limit(1);
+
+  const rows = await query;
   return combineJokeRows(rows)[0];
 };
 

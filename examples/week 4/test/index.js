@@ -1,2 +1,2 @@
-import './jokes.spec.js';
+import './services/jokes.spec.js';
 

@@ -22,7 +22,7 @@ const combineJokeRows = jokeRows => jokeRows.reduce((jokes, joke) => {
 }, []);
 
 
-const getJokesCount = async () => (await knex('jokes').count())[0].count;
+const getJokesCount = async () => parseFloat((await knex('jokes').count())[0].count);
 
 export const getRandomJoke = async () => {
   const count = await getJokesCount();
