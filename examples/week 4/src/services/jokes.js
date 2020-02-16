@@ -1,7 +1,7 @@
 import knex from '../database'
 
 const selectColumns = ['j.id', 'j.title', 'j.question', 'j.answer',
-  'j.created_on', 'u.display_name AS submitter'];
+  'j.created_on', 'c.title AS category', 'u.display_name AS submitter'];
 
 const buildBaseJokesQuery = (whereClause = {}) =>
   knex('jokes AS j')
