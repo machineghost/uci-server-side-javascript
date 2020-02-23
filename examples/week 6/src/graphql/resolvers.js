@@ -27,9 +27,8 @@ const resolvers = {
     // Extract category IDs and convert them into numbers
     const categoryIds = joke.categoryIds.map(parseFloat);
     delete joke.categoryIds;
-
-    const newJoke = await addJoke(joke, categoryIds);
-    return wrapSubmitter(newJoke);
+    const { id } = await addJoke(joke, ...categoryIds);
+    return wrapSubmitter(await getJokeById(id));
   },
   chuckJoke: async () => wrapSubmitter(await getRandomChuckJoke()),
   deleteJoke: async ({ id }) => {
@@ -40,7 +39,7 @@ const resolvers = {
     }
     return { wasSuccessful: true };
   },
-  joke: async ({ id }) =>wrapSubmitter(await getJokeById(id)),
+  joke: async ({ id }) => wrapSubmitter(await getJokeById(id)),
   jokes: async ({ categoryId }) =>
     (await getJokesByCategoryId(categoryId)).map(wrapSubmitter),
   randomJoke: async () => wrapSubmitter(await getRandomJoke()),
