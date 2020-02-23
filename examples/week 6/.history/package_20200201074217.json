@@ -1,0 +1,30 @@
+{
+  "name": "joke-teller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean-db-test": "npm run reset-test-db; npm run test",
+    "make-db": "dropdb jokes; createdb jokes",
+    "make-test-db": "dropdb jokes-test; createdb jokes-test",
+    "migrate": "knex migrate:latest",
+    "reset-db": "npm run make-db; npm run migrate; npm run seed",
+    "reset-test-db": "npm run make-test-db; npm run migrate -- --env=test; npm run seed-test",
+    "seed": "psql -d jokes -f sql/seed.sql",
+    "seed-test": "psql -d jokes-test -f sql/seed.sql",
+    "start": "node -r esm src/index.js",
+    "test": "NODE_ENV=test mocha --exit -r esm test/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.6.0",
+    "knex": "^0.20.8",
+    "mocha": "^6.2.2",
+    "pg": "^7.17.1"
+  }
+}
