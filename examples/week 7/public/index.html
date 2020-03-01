@@ -1,0 +1,346 @@
+<meta charset="UTF-8" />
+<meta name="google" content="notranslate" />
+<meta http-equiv="Content-Language" content="en" />
+<!-- Bootstrap, jQuery, and a Modal (dialog) library -->
+<script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+  crossorigin="anonymous"
+></script>
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+  crossorigin="anonymous"
+></script>
+
+<style>
+  body {
+    margin: 0 auto;
+    width: 600px;
+  }
+  body.waiting {
+    cursor: progress;
+  }
+  ul {
+    align-content: space-around;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style-type: none;
+    margin: -0.5em auto 0;
+    padding: 0;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
+  }
+  li {
+    border: 5px blue dotted;
+    color: blue;
+    font-size: 1.3em;
+    height: 130px;
+    margin: 1em 0.75em 0;
+    padding: 0.75em;
+    width: 185px;
+  }
+  #row1 li {
+    margin: 1em 0.25em 0;
+    width: 160px;
+  }
+  #chuck {
+    line-height: 1.5em;
+  }
+  #chuck img {
+    width: 40px;
+  }
+  form input {
+    width: 15em;
+  }
+  #welcome-message {
+    position: absolute;
+    right: 10em;
+    top: 1em;
+  }
+  #login-failure,
+  #signup-failure,
+  #reset-failure {
+    display: none;
+    color: red;
+  }
+</style>
+
+<div class="modal" tabindex="-1" role="dialog" id="signup-dialog">
+  <form id="signup-form">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sign-Up</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <label>Name: <input id="display_name"/></label>
+          </div>
+          <div>
+            <label>Email Address: <input id="email_address"/></label>
+          </div>
+          <div>
+            <label>Username: <input id="signup-username"/></label>
+          </div>
+          <div>
+            <label
+              >Password: <input id="signup-password" type="password"
+            /></label>
+          </div>
+          <div>
+            (If this was a real app you'd have a second password input here, and
+            use Javascript to ensure they matched before letting this form
+            through)
+          </div>
+        </div>
+        <div id="signup-failure">
+          I'm sorry, something went wrong.
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+          </button>
+          <input type="submit" class="btn btn-primary" value="Sign-Up" />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="login-dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="login-form">
+        <div class="modal-body">
+          <div>
+            <label>Username: <input id="login-username"/></label>
+          </div>
+          <div>
+            <label
+              >Password: <input id="login-password" type="password"
+            /></label>
+          </div>
+        </div>
+        <div id="login-failure">
+          I'm sorry, something about your username and/or password didn't match.
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+          </button>
+          <button id="request-reset" class="btn btn-secondary">
+            Request Password Reset
+          </button>
+          <input type="submit" class="btn btn-primary" value="Login" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="reset-dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Reset Password</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="reset-form">
+        <div class="modal-body">
+          <div>
+            <label>Username: <input id="reset-username"/></label>
+          </div>
+          <div>
+            <label>Email Code: <input id="key"/></label>
+          </div>
+          <div>
+            <label
+              >New Password: <input id="reset-password" type="password"
+            /></label>
+          </div>
+        </div>
+        <div id="reset-failure">
+          I'm sorry, there was an error resetting your password
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+          </button>
+          <input type="submit" class="btn btn-primary" value="Reset Password" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="add-joke-dialog">
+  <form id="add-form">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add a Joke</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <label
+              >Title:
+              <input name="title" placeholder="Two Fonts Walk Into  a Bar"
+            /></label>
+          </p>
+          <p>
+            <label
+              >Question:
+              <input
+                name="question"
+                placeholder="Helvetica and Times New Roman walk into a bar"
+            /></label>
+          </p>
+          <p>
+            <label
+              >Answer:
+              <input
+                name="answer"
+                placeholder="The bartender tells them, get out of here: we don’t serve your type."
+            /></label>
+          </p>
+          <p>
+            <label
+              >Created By: <input name="created_by" placeholder="1"
+            /></label>
+          </p>
+          <p>
+            <label
+              >Category ID(s): <input name="category_ids" placeholder="1"
+            /></label>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <input class="btn btn-primary" type="submit" value="Add Joke" />
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="delete-joke-dialog">
+  <form id="delete-form">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete a Joke</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>ID: <input name="id" placeholder="7"/></label>
+        </div>
+        <div class="modal-footer">
+          <input class="btn btn-primary" type="submit" value="Delete Joke" />
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div style="text-align: center;">
+  <div id="welcome-message"></div>
+  <img src="/static/lol.png" style="width: 200px;" />
+  <h1>Joke Teller</h1>
+  <div id="loginBox">
+    <a href="#" data-toggle="modal" data-target="#signup-dialog">Sign-up</a>
+    or
+    <a href="#" data-toggle="modal" data-target="#login-dialog">Login</a>
+    <br />
+    (or
+    <a href="#" data-toggle="modal" data-target="#reset-dialog"
+      >reset password</a
+    >; normally this would be a separate page)
+  </div>
+  <div id="logoutBox" style="display:none">
+    <a href="#" id="logout">Logout</a>
+  </div>
+  <div style="margin-top:2em;">Would you like to hear ...?</div>
+  <ul id="row1">
+    <li id="random">Random Joke</li>
+    <li id="chuck">
+      <img src="/static/chuck.jpg" /><br />
+      <span style="white-space:nowrap">Chuck Norris</span> Jokes
+    </li>
+    <li id="bestKnock">Our Best <nobr>Knock-Knock</nobr> Joke</li>
+  </ul>
+  <div style="margin-top: 1em;">
+    Or would you prefer to see a list of all ...?
+  </div>
+  <ul>
+    <li id="chickenJokes">Chicken Crossing the Road Jokes</li>
+    <li id="knockJokes">Knock-Knock Jokes</li>
+  </ul>
+</div>
+<hr />
+<h2>
+  <a href="#" data-toggle="modal" data-target="#add-joke-dialog">Add a Joke</a>
+</h2>
+
+<h2>
+  <a href="#" data-toggle="modal" data-target="#delete-joke-dialog"
+    >Delete a Joke</a
+  >
+</h2>
+
+<script src="/static/index.js"></script>
